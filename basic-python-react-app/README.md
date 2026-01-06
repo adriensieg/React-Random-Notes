@@ -1,4 +1,4 @@
-
+# React + FastAPI Minimal Full-Stack App
 
 This application demonstrates a modern full-stack architecture where a **React frontend interacts** with a **FastAPI backend** via **HTTP**. 
 - The backend (`app.py`) exposes `REST` endpoints (`/data` `GET`, `/send` `POST`) and handles **CORS**.
