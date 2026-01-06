@@ -1,9 +1,8 @@
 # React-Random-Notes
 
 # React JS
-
+- [Concepts to master]()
 - [Perfect Layout]()
-- [P]()
 
 # Concepts to master
 
