@@ -5,7 +5,25 @@
 - [Perfect Layout]()
 - [P]()
 
-# Layout
+# Concepts to master
+
+- **Components** – Functional and Class components; building blocks of UI
+- **JSX** – Syntax for writing HTML-like code inside JavaScript
+- **Props** – Passing data from parent to child components
+- **State** – Component-level data that changes over time
+- **Event Handling** – Handling user interactions like clicks and inputs
+- **Conditional Rendering** – Showing different UI based on conditions
+- **Lists & Keys** – Rendering multiple items efficiently
+- **Hooks** – useState, useEffect, useRef, useContext, etc.
+- **One-Way Data Flow** – Parent → Child data flow
+- **Controlled Components** – Form inputs controlled by state
+- **Component Lifecycle** – Mounting, updating, unmounting (mostly via hooks now)
+- **Composition** – Reusing and nesting components instead of inheritance
+- **Context API** – Global state management for passing data deep in the tree
+- **Refs** – Accessing DOM elements directly
+- **Virtual DOM & Reconciliation** – How React optimizes UI updates
+
+# My perfect Layout
 
 ```
 react-app/
@@ -71,41 +89,6 @@ my-app/
         ├── main.jsx
         └── App.jsx
 ```
-
-### Backend (Python – FastAPI)
-
-##### `backend/requirements.txt`
-```
-fastapi
-uvicorn
-```
-#####
-
-```
-from fastapi import FastAPI
-from fastapi.middleware.cors import CORSMiddleware
-
-app = FastAPI()
-
-# Allow React to talk to Python (important!)
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["http://localhost:5173"],
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
-
-@app.get("/api/hello")
-def hello():
-    return {"message": "Hello from Python"}
-```
-
-
-
-
-
-
-
 
 
 
