@@ -31,5 +31,9 @@ simple-react-python-app/
 │           └── usePythonMessage.jsx
 │
 └── README.md                          # Project overview
-
 ```
+
+# Outputs
+
+![Basic-react-python](https://github.com/user-attachments/assets/83dd4b18-d8df-4874-9cde-444c431c5225)
+
