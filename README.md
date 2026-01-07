@@ -23,9 +23,15 @@
 - **Virtual DOM & Reconciliation** – How React optimizes UI updates
 
 ### Hooks
-<img width="624" height="362" alt="image" src="https://github.com/user-attachments/assets/ab984952-cf5b-4a2e-ae48-3177632532ff" />
 
 A **hook** is a **small function** in React that **helps a component remember things (state)** or do stuff when things change (effects).
+- `useState` - Here’s the basic syntax of useState:
+
+```
+const [stateVariable, setStateFunction] = useState(initialValue);
+```
+
+<img width="624" height="362" alt="image" src="https://github.com/user-attachments/assets/ab984952-cf5b-4a2e-ae48-3177632532ff" />
 
 https://www.geeksforgeeks.org/reactjs/reactjs-hooks-complete-reference/
 
