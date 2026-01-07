@@ -38,11 +38,11 @@ https://www.geeksforgeeks.org/reactjs/reactjs-hooks-complete-reference/
 - **useEffect**: useEffect is used to perform side effects (like fetching data or subscribing to services) in functional components.
 - **useContext**: useContext allows you to access the value of a context in functional components.
 - **useReducer**: useReducer is an alternative to useState for more complex state logic.
-**useRef**: useRef returns a mutable ref object which can be used to reference DOM elements or store mutable values.
-**useMemo**: useMemo is used to memoize values or computations to prevent expensive calculations on every render.
-**useCallback**: useCallback is used to memoize functions so that they are not recreated on every render.
-**useLayoutEffect**: Similar to useEffect, but it runs synchronously after all DOM mutations, allowing you to perform operations on the layout.
-**useImperativeHandle**: useImperativeHandle customizes the instance value that is exposed when using ref in functional components.
+- **useRef**: useRef returns a mutable ref object which can be used to reference DOM elements or store mutable values.
+- **useMemo**: useMemo is used to memoize values or computations to prevent expensive calculations on every render.
+- **useCallback**: useCallback is used to memoize functions so that they are not recreated on every render.
+- **useLayoutEffect**: Similar to useEffect, but it runs synchronously after all DOM mutations, allowing you to perform operations on the layout.
+- **useImperativeHandle**: useImperativeHandle customizes the instance value that is exposed when using ref in functional components.
 
 
 ```javascript
