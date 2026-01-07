@@ -34,6 +34,16 @@ const [stateVariable, setStateFunction] = useState(initialValue);
 <img width="624" height="362" alt="image" src="https://github.com/user-attachments/assets/ab984952-cf5b-4a2e-ae48-3177632532ff" />
 
 https://www.geeksforgeeks.org/reactjs/reactjs-hooks-complete-reference/
+- **useState**: useState is used to add state to functional components.
+- **useEffect**: useEffect is used to perform side effects (like fetching data or subscribing to services) in functional components.
+- **useContext**: useContext allows you to access the value of a context in functional components.
+- **useReducer**: useReducer is an alternative to useState for more complex state logic.
+**useRef**: useRef returns a mutable ref object which can be used to reference DOM elements or store mutable values.
+**useMemo**: useMemo is used to memoize values or computations to prevent expensive calculations on every render.
+**useCallback**: useCallback is used to memoize functions so that they are not recreated on every render.
+**useLayoutEffect**: Similar to useEffect, but it runs synchronously after all DOM mutations, allowing you to perform operations on the layout.
+**useImperativeHandle**: useImperativeHandle customizes the instance value that is exposed when using ref in functional components.
+
 
 ```javascript
 import React, { useState } from 'react';
