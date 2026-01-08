@@ -68,6 +68,9 @@ const App = () => {
 export default App;
 ```
 
+- The `useState` hook is used to create a `num` state, initialized to `0`, and a `setNum` function to update it when the button is clicked.
+- The `handleClick` function increments num by 1 each time the button is clicked, updating the displayed value in the `<h2>` tag.
+
 # My perfect Layout
 
 ```
