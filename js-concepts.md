@@ -8,14 +8,14 @@ Syntax is the set of rules for how you write code. It's like grammar for a langu
 
 Variables are containers for storing data.
 
-JavaScript
+```JavaScript
 
     let name = "Alex"; // String
     let age = 25;      // Number
     let isHappy = true; // Boolean
     
     console.log(name); // "Alex"
-
+```
 **Operators**
 
 Symbols used to perform operations on values.
