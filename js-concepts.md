@@ -7,42 +7,47 @@ Syntax is the set of rules for how you write code. It's like grammar for a langu
 **Variables and Data Types**
 
 Variables are containers for storing data.
-```
-let name = "Alex"; // String
-let age = 25;      // Number
-let isHappy = true; // Boolean
 
-console.log(name); // "Alex"
-```
+JavaScript
+
+    let name = "Alex"; // String
+    let age = 25;      // Number
+    let isHappy = true; // Boolean
+    
+    console.log(name); // "Alex"
+
 **Operators**
 
 Symbols used to perform operations on values.
 
-```
-let sum = 10 + 5;      // Arithmetic: 15
-let isEqual = (10 == 10); // Comparison: true
-let bothTrue = (true && false); // Logical: false
-```
+JavaScript
+
+    let sum = 10 + 5;      // Arithmetic: 15
+    let isEqual = (10 == 10); // Comparison: true
+    let bothTrue = (true && false); // Logical: false
 
 **Control Structures**
 
 Logic that determines which path the code takes.
 
-```
-if (age > 18) {
-  console.log("Adult"); // "Adult"
-}
-```
+JavaScript
+
+    if (age > 18) {
+      console.log("Adult"); // "Adult"
+    }
+
 **Functions**
 
 Reusable blocks of code.
 
-```
-function greet() {
-  return "Hello!";
-}
-console.log(greet()); // "Hello!"
-```
+JavaScript
+
+    function greet() {
+      return "Hello!";
+    }
+    console.log(greet()); // "Hello!"
+
+* * *
 
 ### 1.2 Variables
 
@@ -55,14 +60,16 @@ Modern JavaScript uses three ways to declare variables. Think of them as differe
 | const | No | Block | Use this for values that stay the same. |
 
 **Example: let vs const**
-```
-let score = 10;
-score = 11; // Works
-console.log(score); // 11
 
-const pi = 3.14;
-// pi = 3.15; // Error: Assignment to constant variable.
-```
+JavaScript
+
+    let score = 10;
+    score = 11; // Works
+    console.log(score); // 11
+    
+    const pi = 3.14;
+    // pi = 3.15; // Error: Assignment to constant variable.
+
 **Variable Scope**
 
 Scope is "where" a variable is accessible.
@@ -71,13 +78,15 @@ Scope is "where" a variable is accessible.
     
 *   **Block:** Only available inside curly braces `{}`.
     
-```
 
-{
-  let blockVar = "Hidden";
-}
-// console.log(blockVar); // Error: blockVar is not defined
-```
+JavaScript
+
+    {
+      let blockVar = "Hidden";
+    }
+    // console.log(blockVar); // Error: blockVar is not defined
+
+* * *
 
 ### 1.3 Statements
 
@@ -87,25 +96,28 @@ A statement is an instruction for the computer to perform an action.
 
 A group of statements enclosed in `{ }`.
 
-```
-{
-  let x = 1;
-  let y = 2;
-  console.log(x + y); // 3
-}
-```
+JavaScript
+
+    {
+      let x = 1;
+      let y = 2;
+      console.log(x + y); // 3
+    }
 
 **Error Handling**
 
 Preventing the app from crashing when something goes wrong.
 
-```
-try {
-  nonExistentFunction();
-} catch (error) {
-  console.log("Caught an error!"); // "Caught an error!"
-}
-```
+JavaScript
+
+    try {
+      nonExistentFunction();
+    } catch (error) {
+      console.log("Caught an error!"); // "Caught an error!"
+    }
+
+* * *
+
 ### 1.4 Keywords
 
 Keywords are reserved words that have special meanings.
@@ -167,7 +179,7 @@ Used for "Blueprints" (Classes).
 JavaScript
 
     class Animal {
-      constructor(name) {
+      constructor(name) {å
         this.name = name;
       }
     }
