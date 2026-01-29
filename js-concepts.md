@@ -1520,12 +1520,1538 @@ window.onerror = function(message, source, lineno) {
 *   **Provide Feedback:** Instead of showing the user a technical error code, show a friendly message like _"Oops! Something went wrong with the connection. Please try again."_
 
 
+# Node.js Complete Tutorial
 
+## 1. What is Node.js?
 
+**Node.js** = JavaScript runtime built on Chrome's V8 engine. Lets you run JavaScript outside the browser.
 
+**Key traits:**
+- Asynchronous (non-blocking)
+- Event-driven
+- Single-threaded with event loop
 
+---
 
+## 2. Installing & Running
 
+```bash
+# Check version
+node -v
 
+# Run a file
+node app.js
 
+# Interactive mode (REPL)
+node
+```
+
+---
+
+## 3. The Basics
+
+### Hello World
+
+```js
+// app.js
+console.log('Hello, Node.js!');
+
+// Output: Hello, Node.js!
+```
+
+### Variables & Types
+
+```js
+const name = 'Alice';
+let age = 25;
+var city = 'NYC'; // avoid var, use let/const
+
+console.log(typeof name); // Output: string
+console.log(typeof age);  // Output: number
+```
+
+---
+
+## 4. Modules
+
+**Module** = reusable piece of code. Node uses CommonJS (require/exports) by default.
+
+### Creating a Module
+
+```js
+// math.js
+function add(a, b) {
+  return a + b;
+}
+
+function multiply(a, b) {
+  return a * b;
+}
+
+module.exports = { add, multiply };
+```
+
+### Using a Module
+
+```js
+// app.js
+const math = require('./math');
+
+console.log(math.add(5, 3));      // Output: 8
+console.log(math.multiply(4, 2)); // Output: 8
+```
+
+### Single Export
+
+```js
+// greet.js
+module.exports = function(name) {
+  return `Hello, ${name}!`;
+};
+
+// app.js
+const greet = require('./greet');
+console.log(greet('Bob')); // Output: Hello, Bob!
+```
+
+---
+
+## 5. Built-in Modules
+
+### `fs` - File System
+
+```js
+const fs = require('fs');
+
+// Write file (sync)
+fs.writeFileSync('test.txt', 'Hello from Node!');
+
+// Read file (sync)
+const data = fs.readFileSync('test.txt', 'utf8');
+console.log(data); // Output: Hello from Node!
+
+// Async versions (better for performance)
+fs.writeFile('async.txt', 'Async write', (err) => {
+  if (err) throw err;
+  console.log('File written!'); // Output: File written!
+});
+
+fs.readFile('async.txt', 'utf8', (err, data) => {
+  if (err) throw err;
+  console.log(data); // Output: Async write
+});
+```
+
+### `path` - Path Operations
+
+```js
+const path = require('path');
+
+const filePath = '/users/documents/file.txt';
+
+console.log(path.basename(filePath)); // Output: file.txt
+console.log(path.dirname(filePath));  // Output: /users/documents
+console.log(path.extname(filePath));  // Output: .txt
+console.log(path.join('/users', 'docs', 'file.txt')); 
+// Output: /users/docs/file.txt
+```
+
+### `os` - Operating System
+
+```js
+const os = require('os');
+
+console.log(os.platform());   // Output: linux / darwin / win32
+console.log(os.cpus().length); // Output: 8 (number of cores)
+console.log(os.freemem());    // Output: 8589934592 (bytes)
+console.log(os.homedir());    // Output: /home/username
+```
+
+### `http` - HTTP Server
+
+```js
+const http = require('http');
+
+const server = http.createServer((req, res) => {
+  res.writeHead(200, { 'Content-Type': 'text/plain' });
+  res.end('Hello World');
+});
+
+server.listen(3000, () => {
+  console.log('Server running on port 3000');
+});
+
+// Visit http://localhost:3000
+// Output: Hello World
+```
+
+---
+
+## 6. NPM - Node Package Manager
+
+**NPM** = package manager for Node.js. Manages dependencies.
+
+```bash
+# Initialize project
+npm init -y
+
+# Install package
+npm install express
+
+# Install dev dependency
+npm install --save-dev nodemon
+
+# Uninstall
+npm uninstall express
+
+# Install globally
+npm install -g nodemon
+```
+
+### `package.json` Example
+
+```json
+{
+  "name": "my-app",
+  "version": "1.0.0",
+  "scripts": {
+    "start": "node app.js",
+    "dev": "nodemon app.js"
+  },
+  "dependencies": {
+    "express": "^4.18.0"
+  }
+}
+```
+
+```bash
+npm start  # runs "node app.js"
+npm run dev # runs "nodemon app.js"
+```
+
+---
+
+## 7. Async Programming
+
+**Metaphor:** You order food (async task). You don't wait standing there. You sit down, check your phone (do other work), and get notified when food is ready.
+
+### Callbacks
+
+```js
+function fetchUser(id, callback) {
+  setTimeout(() => {
+    callback({ id: id, name: 'Alice' });
+  }, 1000);
+}
+
+fetchUser(1, (user) => {
+  console.log(user); // Output (after 1s): { id: 1, name: 'Alice' }
+});
+```
+
+### Callback Hell (Bad Pattern)
+
+```js
+getData(1, (a) => {
+  getData(2, (b) => {
+    getData(3, (c) => {
+      console.log(a, b, c); // nested callbacks = hard to read
+    });
+  });
+});
+```
+
+### Promises
+
+```js
+function fetchUser(id) {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      if (id) {
+        resolve({ id: id, name: 'Bob' });
+      } else {
+        reject('No ID provided');
+      }
+    }, 1000);
+  });
+}
+
+fetchUser(2)
+  .then(user => console.log(user))  // Output: { id: 2, name: 'Bob' }
+  .catch(err => console.log(err));
+```
+
+### Async/Await (Modern Approach)
+
+```js
+async function getUser() {
+  try {
+    const user = await fetchUser(3);
+    console.log(user); // Output: { id: 3, name: 'Bob' }
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+getUser();
+```
+
+### Multiple Async Operations
+
+```js
+async function getAllUsers() {
+  const [user1, user2] = await Promise.all([
+    fetchUser(1),
+    fetchUser(2)
+  ]);
+  
+  console.log(user1, user2);
+  // Output: { id: 1, name: 'Bob' } { id: 2, name: 'Bob' }
+}
+
+getAllUsers();
+```
+
+---
+
+## 8. Event Emitter
+
+**Node's event system.** Like a notification system.
+
+```js
+const EventEmitter = require('events');
+const emitter = new EventEmitter();
+
+// Register listener
+emitter.on('message', (data) => {
+  console.log('Message received:', data);
+});
+
+// Emit event
+emitter.emit('message', 'Hello!');
+// Output: Message received: Hello!
+
+emitter.emit('message', 'How are you?');
+// Output: Message received: How are you?
+```
+
+### Custom Event Emitter Class
+
+```js
+const EventEmitter = require('events');
+
+class Logger extends EventEmitter {
+  log(message) {
+    console.log(message);
+    this.emit('logged', { message });
+  }
+}
+
+const logger = new Logger();
+
+logger.on('logged', (data) => {
+  console.log('Event captured:', data);
+});
+
+logger.log('Hello');
+// Output: 
+// Hello
+// Event captured: { message: 'Hello' }
+```
+
+---
+
+## 9. Streams
+
+**Stream** = process data piece by piece instead of loading everything into memory. Like drinking water from a tap vs. filling a bucket first.
+
+**Types:**
+- Readable (read data)
+- Writable (write data)
+- Duplex (both)
+- Transform (modify data while streaming)
+
+### Reading a File Stream
+
+```js
+const fs = require('fs');
+
+const readStream = fs.createReadStream('./large-file.txt', 'utf8');
+
+readStream.on('data', (chunk) => {
+  console.log('New chunk:', chunk);
+});
+
+readStream.on('end', () => {
+  console.log('Finished reading');
+});
+```
+
+### Writing to a Stream
+
+```js
+const writeStream = fs.createWriteStream('./output.txt');
+
+writeStream.write('Line 1\n');
+writeStream.write('Line 2\n');
+writeStream.end('Final line');
+
+console.log('Done writing');
+// Output: Done writing
+```
+
+### Pipe Streams
+
+```js
+const readStream = fs.createReadStream('./input.txt');
+const writeStream = fs.createWriteStream('./output.txt');
+
+readStream.pipe(writeStream);
+
+console.log('Piping data...');
+// Output: Piping data...
+```
+
+### HTTP Stream Example
+
+```js
+const http = require('http');
+const fs = require('fs');
+
+const server = http.createServer((req, res) => {
+  const stream = fs.createReadStream('./large-file.txt');
+  stream.pipe(res); // stream file to response
+});
+
+server.listen(3000);
+```
+
+---
+
+## 10. Express.js Basics
+
+**Express** = minimal web framework for Node.js.
+
+```bash
+npm install express
+```
+
+### Basic Server
+
+```js
+const express = require('express');
+const app = express();
+
+app.get('/', (req, res) => {
+  res.send('Hello Express!');
+});
+
+app.listen(3000, () => {
+  console.log('Server on port 3000');
+});
+
+// Visit http://localhost:3000
+// Output: Hello Express!
+```
+
+### Routes
+
+```js
+app.get('/users', (req, res) => {
+  res.json([{ id: 1, name: 'Alice' }, { id: 2, name: 'Bob' }]);
+});
+
+app.get('/users/:id', (req, res) => {
+  const id = req.params.id;
+  res.json({ id: id, name: 'User ' + id });
+});
+
+// GET /users/5
+// Output: {"id":"5","name":"User 5"}
+```
+
+### POST Request
+
+```js
+app.use(express.json()); // parse JSON body
+
+app.post('/users', (req, res) => {
+  const user = req.body;
+  console.log(user);
+  res.status(201).json({ message: 'User created', user });
+});
+
+// POST /users with body: {"name":"Charlie"}
+// Output: {"message":"User created","user":{"name":"Charlie"}}
+```
+
+### Middleware
+
+```js
+// Logger middleware
+app.use((req, res, next) => {
+  console.log(`${req.method} ${req.url}`);
+  next(); // pass to next middleware
+});
+
+app.get('/test', (req, res) => {
+  res.send('Test route');
+});
+
+// GET /test
+// Console Output: GET /test
+// Response: Test route
+```
+
+### Error Handling
+
+```js
+app.get('/error', (req, res) => {
+  throw new Error('Something broke!');
+});
+
+// Error middleware (must have 4 params)
+app.use((err, req, res, next) => {
+  console.error(err.message);
+  res.status(500).json({ error: err.message });
+});
+
+// GET /error
+// Output: {"error":"Something broke!"}
+```
+
+---
+
+## 11. Working with JSON
+
+```js
+const user = { name: 'Alice', age: 25 };
+
+// Object to JSON string
+const json = JSON.stringify(user);
+console.log(json); // Output: {"name":"Alice","age":25}
+
+// JSON string to Object
+const parsed = JSON.parse(json);
+console.log(parsed.name); // Output: Alice
+```
+
+### Read/Write JSON Files
+
+```js
+const fs = require('fs');
+
+// Write
+const data = { users: [{ id: 1, name: 'Alice' }] };
+fs.writeFileSync('data.json', JSON.stringify(data, null, 2));
+
+// Read
+const fileData = fs.readFileSync('data.json', 'utf8');
+const parsed = JSON.parse(fileData);
+console.log(parsed.users[0].name); // Output: Alice
+```
+
+---
+
+## 12. Environment Variables
+
+Use `.env` file for configuration (API keys, DB URLs, etc.)
+
+```bash
+npm install dotenv
+```
+
+### `.env` File
+
+```
+PORT=3000
+DB_HOST=localhost
+API_KEY=secret123
+```
+
+### Usage
+
+```js
+require('dotenv').config();
+
+console.log(process.env.PORT);     // Output: 3000
+console.log(process.env.DB_HOST);  // Output: localhost
+console.log(process.env.API_KEY);  // Output: secret123
+
+const app = require('express')();
+app.listen(process.env.PORT, () => {
+  console.log(`Server on port ${process.env.PORT}`);
+});
+```
+
+---
+
+## 13. Command Line Arguments
+
+```js
+// app.js
+const args = process.argv.slice(2);
+console.log(args);
+
+// Run: node app.js hello world 123
+// Output: ['hello', 'world', '123']
+```
+
+### Better CLI Arguments
+
+```bash
+npm install yargs
+```
+
+```js
+const yargs = require('yargs');
+
+const argv = yargs
+  .option('name', {
+    alias: 'n',
+    description: 'Your name',
+    type: 'string'
+  })
+  .option('age', {
+    alias: 'a',
+    description: 'Your age',
+    type: 'number'
+  })
+  .argv;
+
+console.log(`Hello ${argv.name}, you are ${argv.age}`);
+
+// Run: node app.js --name Alice --age 25
+// Output: Hello Alice, you are 25
+
+// Run: node app.js -n Bob -a 30
+// Output: Hello Bob, you are 30
+```
+
+---
+
+## 14. Debugging
+
+### Console Methods
+
+```js
+console.log('Regular log');
+console.error('Error message');
+console.warn('Warning');
+console.table([{ name: 'Alice', age: 25 }, { name: 'Bob', age: 30 }]);
+console.time('loop');
+for (let i = 0; i < 1000000; i++) {}
+console.timeEnd('loop'); // Output: loop: 2.5ms
+```
+
+### Node Debugger
+
+```js
+// app.js
+const x = 5;
+debugger; // breakpoint
+const y = x * 2;
+console.log(y);
+```
+
+```bash
+node inspect app.js
+```
+
+---
+
+## 15. Error Handling
+
+### Try-Catch
+
+```js
+function divide(a, b) {
+  if (b === 0) {
+    throw new Error('Cannot divide by zero');
+  }
+  return a / b;
+}
+
+try {
+  console.log(divide(10, 2)); // Output: 5
+  console.log(divide(10, 0)); // throws error
+} catch (error) {
+  console.log('Error:', error.message); // Output: Error: Cannot divide by zero
+}
+```
+
+### Async Error Handling
+
+```js
+async function fetchData() {
+  try {
+    const response = await fetch('https://api.example.com/data');
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.log('Fetch failed:', error.message);
+    return null;
+  }
+}
+```
+
+### Custom Errors
+
+```js
+class ValidationError extends Error {
+  constructor(message) {
+    super(message);
+    this.name = 'ValidationError';
+  }
+}
+
+function validateAge(age) {
+  if (age < 0) {
+    throw new ValidationError('Age cannot be negative');
+  }
+}
+
+try {
+  validateAge(-5);
+} catch (error) {
+  console.log(error.name);    // Output: ValidationError
+  console.log(error.message); // Output: Age cannot be negative
+}
+```
+
+---
+
+## 16. Working with Databases
+
+### MongoDB with Mongoose
+
+```bash
+npm install mongoose
+```
+
+```js
+const mongoose = require('mongoose');
+
+// Connect
+mongoose.connect('mongodb://localhost:27017/myapp', {
+  useNewUrlParser: true,
+  useUnifiedTopology: true
+});
+
+// Define Schema
+const userSchema = new mongoose.Schema({
+  name: String,
+  email: String,
+  age: Number
+});
+
+// Create Model
+const User = mongoose.model('User', userSchema);
+
+// Create
+async function createUser() {
+  const user = new User({
+    name: 'Alice',
+    email: 'alice@example.com',
+    age: 25
+  });
+  
+  await user.save();
+  console.log('User saved:', user);
+}
+
+// Read
+async function getUsers() {
+  const users = await User.find();
+  console.log(users);
+}
+
+// Update
+async function updateUser(id) {
+  const user = await User.findByIdAndUpdate(
+    id,
+    { age: 26 },
+    { new: true }
+  );
+  console.log('Updated:', user);
+}
+
+// Delete
+async function deleteUser(id) {
+  await User.findByIdAndDelete(id);
+  console.log('Deleted');
+}
+```
+
+### SQLite with better-sqlite3
+
+```bash
+npm install better-sqlite3
+```
+
+```js
+const Database = require('better-sqlite3');
+const db = new Database('mydb.sqlite');
+
+// Create table
+db.exec(`
+  CREATE TABLE IF NOT EXISTS users (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT,
+    email TEXT
+  )
+`);
+
+// Insert
+const insert = db.prepare('INSERT INTO users (name, email) VALUES (?, ?)');
+insert.run('Alice', 'alice@example.com');
+
+// Select
+const users = db.prepare('SELECT * FROM users').all();
+console.log(users);
+// Output: [{ id: 1, name: 'Alice', email: 'alice@example.com' }]
+
+// Select one
+const user = db.prepare('SELECT * FROM users WHERE id = ?').get(1);
+console.log(user);
+// Output: { id: 1, name: 'Alice', email: 'alice@example.com' }
+
+// Update
+const update = db.prepare('UPDATE users SET name = ? WHERE id = ?');
+update.run('Alice Smith', 1);
+
+// Delete
+const del = db.prepare('DELETE FROM users WHERE id = ?');
+del.run(1);
+```
+
+---
+
+## 17. Authentication (JWT)
+
+```bash
+npm install jsonwebtoken bcrypt
+```
+
+```js
+const jwt = require('jsonwebtoken');
+const bcrypt = require('bcrypt');
+
+const SECRET = 'mysecret';
+
+// Hash password
+async function hashPassword(password) {
+  const salt = await bcrypt.genSalt(10);
+  const hash = await bcrypt.hash(password, salt);
+  return hash;
+}
+
+// Verify password
+async function verifyPassword(password, hash) {
+  const isValid = await bcrypt.compare(password, hash);
+  return isValid;
+}
+
+// Generate token
+function generateToken(userId) {
+  const token = jwt.sign({ id: userId }, SECRET, { expiresIn: '1h' });
+  return token;
+}
+
+// Verify token
+function verifyToken(token) {
+  try {
+    const decoded = jwt.verify(token, SECRET);
+    return decoded;
+  } catch (error) {
+    return null;
+  }
+}
+
+// Example usage
+(async () => {
+  const hash = await hashPassword('password123');
+  console.log('Hash:', hash);
+  
+  const isValid = await verifyPassword('password123', hash);
+  console.log('Valid:', isValid); // Output: Valid: true
+  
+  const token = generateToken(1);
+  console.log('Token:', token);
+  
+  const decoded = verifyToken(token);
+  console.log('Decoded:', decoded); // Output: Decoded: { id: 1, iat: ..., exp: ... }
+})();
+```
+
+---
+
+## 18. File Uploads
+
+```bash
+npm install multer
+```
+
+```js
+const express = require('express');
+const multer = require('multer');
+
+const app = express();
+
+// Configure storage
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, 'uploads/');
+  },
+  filename: (req, file, cb) => {
+    cb(null, Date.now() + '-' + file.originalname);
+  }
+});
+
+const upload = multer({ storage });
+
+// Single file upload
+app.post('/upload', upload.single('file'), (req, res) => {
+  console.log(req.file);
+  res.json({ message: 'File uploaded', file: req.file });
+});
+
+// Multiple files
+app.post('/upload-multiple', upload.array('files', 5), (req, res) => {
+  console.log(req.files);
+  res.json({ message: 'Files uploaded', count: req.files.length });
+});
+
+app.listen(3000);
+```
+
+---
+
+## 19. Testing with Jest
+
+```bash
+npm install --save-dev jest
+```
+
+### `math.js`
+
+```js
+function add(a, b) {
+  return a + b;
+}
+
+function subtract(a, b) {
+  return a - b;
+}
+
+module.exports = { add, subtract };
+```
+
+### `math.test.js`
+
+```js
+const { add, subtract } = require('./math');
+
+test('adds 1 + 2 to equal 3', () => {
+  expect(add(1, 2)).toBe(3);
+});
+
+test('subtracts 5 - 2 to equal 3', () => {
+  expect(subtract(5, 2)).toBe(3);
+});
+
+test('add returns number', () => {
+  expect(typeof add(1, 1)).toBe('number');
+});
+```
+
+```bash
+npx jest
+
+# Output:
+# PASS  ./math.test.js
+#  ✓ adds 1 + 2 to equal 3
+#  ✓ subtracts 5 - 2 to equal 3
+#  ✓ add returns number
+```
+
+### Async Testing
+
+```js
+// user.js
+async function fetchUser(id) {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve({ id, name: 'Alice' });
+    }, 100);
+  });
+}
+
+module.exports = { fetchUser };
+
+// user.test.js
+const { fetchUser } = require('./user');
+
+test('fetches user', async () => {
+  const user = await fetchUser(1);
+  expect(user.name).toBe('Alice');
+});
+```
+
+---
+
+## 20. WebSockets (real-time)
+
+```bash
+npm install ws
+```
+
+### Server
+
+```js
+const WebSocket = require('ws');
+
+const wss = new WebSocket.Server({ port: 8080 });
+
+wss.on('connection', (ws) => {
+  console.log('Client connected');
+  
+  ws.on('message', (message) => {
+    console.log('Received:', message);
+    ws.send(`Echo: ${message}`);
+  });
+  
+  ws.on('close', () => {
+    console.log('Client disconnected');
+  });
+});
+
+console.log('WebSocket server on port 8080');
+```
+
+### Client
+
+```js
+const WebSocket = require('ws');
+
+const ws = new WebSocket('ws://localhost:8080');
+
+ws.on('open', () => {
+  console.log('Connected to server');
+  ws.send('Hello Server!');
+});
+
+ws.on('message', (data) => {
+  console.log('Received:', data.toString());
+  // Output: Received: Echo: Hello Server!
+});
+```
+
+---
+
+## 21. Child Processes
+
+Run external commands or scripts.
+
+```js
+const { exec, spawn } = require('child_process');
+
+// exec - for simple commands
+exec('ls -la', (error, stdout, stderr) => {
+  if (error) {
+    console.error('Error:', error);
+    return;
+  }
+  console.log('Output:', stdout);
+});
+
+// spawn - for streaming output
+const ls = spawn('ls', ['-la']);
+
+ls.stdout.on('data', (data) => {
+  console.log(`Output: ${data}`);
+});
+
+ls.on('close', (code) => {
+  console.log(`Process exited with code ${code}`);
+});
+```
+
+---
+
+## 22. Clustering (multi-core)
+
+**Metaphor:** One chef vs. a kitchen team. Use all CPU cores.
+
+```js
+const cluster = require('cluster');
+const http = require('http');
+const os = require('os');
+
+if (cluster.isMaster) {
+  const numCPUs = os.cpus().length;
+  console.log(`Master process ${process.pid} starting ${numCPUs} workers`);
+  
+  for (let i = 0; i < numCPUs; i++) {
+    cluster.fork();
+  }
+  
+  cluster.on('exit', (worker) => {
+    console.log(`Worker ${worker.process.pid} died`);
+    cluster.fork(); // restart
+  });
+  
+} else {
+  http.createServer((req, res) => {
+    res.end(`Handled by process ${process.pid}`);
+  }).listen(3000);
+  
+  console.log(`Worker ${process.pid} started`);
+}
+```
+
+---
+
+## 23. CORS (Cross-Origin)
+
+```bash
+npm install cors
+```
+
+```js
+const express = require('express');
+const cors = require('cors');
+
+const app = express();
+
+// Enable CORS for all routes
+app.use(cors());
+
+// Or specific origin
+app.use(cors({
+  origin: 'http://example.com'
+}));
+
+app.get('/api/data', (req, res) => {
+  res.json({ message: 'CORS enabled' });
+});
+
+app.listen(3000);
+```
+
+---
+
+## 24. Rate Limiting
+
+```bash
+npm install express-rate-limit
+```
+
+```js
+const rateLimit = require('express-rate-limit');
+
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100, // limit each IP to 100 requests per windowMs
+  message: 'Too many requests'
+});
+
+app.use('/api/', limiter);
+
+app.get('/api/data', (req, res) => {
+  res.json({ data: 'some data' });
+});
+```
+
+---
+
+## 25. Validation
+
+```bash
+npm install joi
+```
+
+```js
+const Joi = require('joi');
+
+const schema = Joi.object({
+  name: Joi.string().min(3).max(30).required(),
+  email: Joi.string().email().required(),
+  age: Joi.number().integer().min(0).max(120)
+});
+
+const data = {
+  name: 'Alice',
+  email: 'alice@example.com',
+  age: 25
+};
+
+const { error, value } = schema.validate(data);
+
+if (error) {
+  console.log('Validation error:', error.details[0].message);
+} else {
+  console.log('Valid data:', value);
+  // Output: Valid data: { name: 'Alice', email: 'alice@example.com', age: 25 }
+}
+```
+
+---
+
+## 26. Logging
+
+```bash
+npm install winston
+```
+
+```js
+const winston = require('winston');
+
+const logger = winston.createLogger({
+  level: 'info',
+  format: winston.format.json(),
+  transports: [
+    new winston.transports.File({ filename: 'error.log', level: 'error' }),
+    new winston.transports.File({ filename: 'combined.log' }),
+    new winston.transports.Console({ format: winston.format.simple() })
+  ]
+});
+
+logger.info('Info message');
+logger.warn('Warning message');
+logger.error('Error message');
+
+// Console Output:
+// info: Info message
+// warn: Warning message
+// error: Error message
+```
+
+---
+
+## 27. Scheduling Tasks
+
+```bash
+npm install node-cron
+```
+
+```js
+const cron = require('node-cron');
+
+// Run every minute
+cron.schedule('* * * * *', () => {
+  console.log('Running task every minute');
+});
+
+// Run at 2:30 PM every day
+cron.schedule('30 14 * * *', () => {
+  console.log('Running at 2:30 PM');
+});
+
+// Format: minute hour day month weekday
+// * * * * * = every minute
+// 0 0 * * * = midnight every day
+// 0 12 * * 1 = noon every Monday
+```
+
+---
+
+## 28. Email Sending
+
+```bash
+npm install nodemailer
+```
+
+```js
+const nodemailer = require('nodemailer');
+
+const transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: 'your-email@gmail.com',
+    pass: 'your-password'
+  }
+});
+
+const mailOptions = {
+  from: 'your-email@gmail.com',
+  to: 'recipient@example.com',
+  subject: 'Test Email',
+  text: 'Hello from Node.js!',
+  html: '<h1>Hello from Node.js!</h1>'
+};
+
+transporter.sendMail(mailOptions, (error, info) => {
+  if (error) {
+    console.log('Error:', error);
+  } else {
+    console.log('Email sent:', info.response);
+  }
+});
+```
+
+---
+
+## 29. REST API Complete Example
+
+```js
+const express = require('express');
+const app = express();
+
+app.use(express.json());
+
+let users = [
+  { id: 1, name: 'Alice', email: 'alice@example.com' },
+  { id: 2, name: 'Bob', email: 'bob@example.com' }
+];
+
+// GET all users
+app.get('/api/users', (req, res) => {
+  res.json(users);
+});
+
+// GET user by ID
+app.get('/api/users/:id', (req, res) => {
+  const user = users.find(u => u.id === parseInt(req.params.id));
+  if (!user) return res.status(404).json({ error: 'User not found' });
+  res.json(user);
+});
+
+// POST create user
+app.post('/api/users', (req, res) => {
+  const user = {
+    id: users.length + 1,
+    name: req.body.name,
+    email: req.body.email
+  };
+  users.push(user);
+  res.status(201).json(user);
+});
+
+// PUT update user
+app.put('/api/users/:id', (req, res) => {
+  const user = users.find(u => u.id === parseInt(req.params.id));
+  if (!user) return res.status(404).json({ error: 'User not found' });
+  
+  user.name = req.body.name;
+  user.email = req.body.email;
+  res.json(user);
+});
+
+// DELETE user
+app.delete('/api/users/:id', (req, res) => {
+  const index = users.findIndex(u => u.id === parseInt(req.params.id));
+  if (index === -1) return res.status(404).json({ error: 'User not found' });
+  
+  users.splice(index, 1);
+  res.status(204).send();
+});
+
+app.listen(3000, () => console.log('API running on port 3000'));
+```
+
+---
+
+## 30. Best Practices
+
+### Use Async/Await
+
+```js
+// ❌ Bad
+fs.readFile('file.txt', (err, data) => {
+  if (err) throw err;
+  console.log(data);
+});
+
+// ✅ Good
+const fs = require('fs').promises;
+
+async function readFile() {
+  try {
+    const data = await fs.readFile('file.txt', 'utf8');
+    console.log(data);
+  } catch (error) {
+    console.error(error);
+  }
+}
+```
+
+### Handle Errors
+
+```js
+// ❌ Bad
+app.get('/user/:id', (req, res) => {
+  const user = getUser(req.params.id); // might throw
+  res.json(user);
+});
+
+// ✅ Good
+app.get('/user/:id', async (req, res) => {
+  try {
+    const user = await getUser(req.params.id);
+    res.json(user);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+```
+
+### Use Environment Variables
+
+```js
+// ❌ Bad
+const API_KEY = 'hardcoded-key-123';
+
+// ✅ Good
+require('dotenv').config();
+const API_KEY = process.env.API_KEY;
+```
+
+### Validate Input
+
+```js
+// ❌ Bad
+app.post('/user', (req, res) => {
+  const user = req.body; // trust user input
+  saveUser(user);
+});
+
+// ✅ Good
+app.post('/user', (req, res) => {
+  const { error } = schema.validate(req.body);
+  if (error) return res.status(400).json({ error: error.message });
+  saveUser(req.body);
+});
+```
+
+### Avoid Blocking Code
+
+```js
+// ❌ Bad - blocks event loop
+const data = fs.readFileSync('huge-file.txt'); 
+
+// ✅ Good - non-blocking
+const data = await fs.promises.readFile('huge-file.txt');
+```
+
+---
+
+## 31. Common Patterns
+
+### Middleware Pattern
+
+```js
+function logger(req, res, next) {
+  console.log(`${req.method} ${req.url}`);
+  next();
+}
+
+function auth(req, res, next) {
+  const token = req.headers.authorization;
+  if (!token) return res.status(401).json({ error: 'Unauthorized' });
+  next();
+}
+
+app.use(logger);
+app.get('/protected', auth, (req, res) => {
+  res.json({ message: 'Protected data' });
+});
+```
+
+### Factory Pattern
+
+```js
+function createUser(name, email) {
+  return {
+    name,
+    email,
+    createdAt: new Date(),
+    greet() {
+      return `Hello, I'm ${this.name}`;
+    }
+  };
+}
+
+const user1 = createUser('Alice', 'alice@example.com');
+console.log(user1.greet()); // Output: Hello, I'm Alice
+```
+
+### Singleton Pattern
+
+```js
+class Database {
+  constructor() {
+    if (Database.instance) {
+      return Database.instance;
+    }
+    this.connection = 'Connected';
+    Database.instance = this;
+  }
+}
+
+const db1 = new Database();
+const db2 = new Database();
+console.log(db1 === db2); // Output: true
+```
+
+---
+
+## 32. Performance Tips
+
+1. **Use clustering** for CPU-intensive tasks
+2. **Use caching** (Redis, in-memory)
+3. **Use compression** middleware
+4. **Use PM2** for process management
+5. **Enable gzip** for responses
+6. **Use CDN** for static assets
+7. **Database indexing**
+8. **Load balancing** (NGINX)
+9. **Avoid synchronous** operations
+10. **Profile with** `node --prof`
+
+---
+
+## 33. Security Tips
+
+1. **Validate all input**
+2. **Use HTTPS**
+3. **Hash passwords** (bcrypt)
+4. **Use JWT** for auth
+5. **Rate limiting**
+6. **Helmet.js** for headers
+7. **SQL injection** prevention (parameterized queries)
+8. **XSS protection** (sanitize input)
+9. **CSRF tokens**
+10. **Keep dependencies updated**
+
+```bash
+npm install helmet
+```
+
+```js
+const helmet = require('helmet');
+app.use(helmet());
+```
+
+---
+
+## Quick Reference
+
+| Topic | Module | Command |
+|-------|--------|---------|
+| File System | `fs` | `require('fs')` |
+| HTTP Server | `http` | `require('http')` |
+| Path | `path` | `require('path')` |
+| Events | `events` | `require('events')` |
+| Web Framework | `express` | `npm install express` |
+| Database (Mongo) | `mongoose` | `npm install mongoose` |
+| Database (SQL) | `better-sqlite3` | `npm install better-sqlite3` |
+| Auth | `jsonwebtoken` | `npm install jsonwebtoken` |
+| Password Hash | `bcrypt` | `npm install bcrypt` |
+| Environment | `dotenv` | `npm install dotenv` |
+| Validation | `joi` | `npm install joi` |
+| Testing | `jest` | `npm install --save-dev jest` |
+| Logging | `winston` | `npm install winston` |
+
+---
 
